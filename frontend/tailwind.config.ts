@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -35,6 +35,15 @@ const config = {
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+          text: "hsl(var(--warning-text))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          text: "hsl(var(--success-text))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",

@@ -4,7 +4,7 @@
 
   @layer base {
     :root {
-      --background: 0 0% 100%;
+      --background: 0 0% 90%;
       --foreground: 222.2 84% 4.9%;
 
       --card: 0 0% 100%;
@@ -27,6 +27,13 @@
 
       --destructive: 0 84.2% 60.2%;
       --destructive-foreground: 210 40% 98%;
+
+      --warning: 32 100% 82%;
+      --warning-text: 32 100% 40%;
+      --warning-foreground: 39 100% 98%;
+
+      --success: 79 78% 72%;
+      --success-text: 79 100% 30%;
 
       --border: 214.3 31.8% 91.4%;
       --input: 214.3 31.8% 91.4%;
@@ -59,6 +66,13 @@
 
       --destructive: 0 62.8% 30.6%;
       --destructive-foreground: 210 40% 98%;
+
+      --warning: 32 100% 82%;
+      --warning-text: 32 100% 40%;
+      --warning-foreground: 39 100% 98%;
+
+      --success: 79 78% 72%;
+      --success-text: 79 100% 30%;
 
       --border: 217.2 32.6% 17.5%;
       --input: 217.2 32.6% 17.5%;
