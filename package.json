@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "start:frontend": "yarn workspace @safe-forms/frontend dev",
+    "start:backend": "yarn workspace @safe-forms/backend start"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.0"
+  }
+}
