@@ -1,9 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { deleteCookie } from "cookies-next";
+import { useAuth } from "@/context/authContext";
 import { LogOut, Moon, Settings, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,11 +17,10 @@ import {
 } from "./dropdown-menu";
 
 const SettingsToggle: React.FC = () => {
-  const router = useRouter();
   const { setTheme } = useTheme();
+  const { logout } = useAuth();
   const handleLogout = () => {
-    deleteCookie("token");
-    router.push("/signin");
+    logout();
   };
 
   return (
