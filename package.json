@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "start:frontend": "yarn workspace @safe-forms/frontend dev",
-    "start:backend": "yarn workspace @safe-forms/backend start"
+    "start:backend": "yarn workspace @safe-forms/backend start",
+    "build:backend": "yarn workspace @safe-forms/backend build"
   },
   "devDependencies": {
     "typescript": "^4.0.0"
