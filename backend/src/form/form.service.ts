@@ -29,7 +29,6 @@ export class FormService {
     data: ICreateFormRequest,
     userId: string,
   ): Promise<ICreateFormResponse> {
-    console.log({ data });
     const completeData: Omit<IForm, 'id'> & { userId: string } = {
       ...data,
       createdAt: new Date().toISOString(),
