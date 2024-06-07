@@ -2,6 +2,8 @@ name: Deploy Backend to Azure Web App
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "backend/**"
       - "shared/**"
@@ -9,6 +11,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout code
@@ -24,9 +27,9 @@ jobs:
 
       - name: Set up .env file
         run: |
-          echo FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }} >> .env
-          echo FIREBASE_PRIVATE_KEY=${{ secrets.FIREBASE_PRIVATE_KEY }} >> .env
-          echo FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }} >> .env
+          echo FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }} >> ./backend/.env
+          echo FIREBASE_PRIVATE_KEY=${{ secrets.FIREBASE_PRIVATE_KEY }} >> ./backend/.env
+          echo FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }} >> ./backend/.env
 
       - name: Build project
         run: yarn build:backend
@@ -36,7 +39,7 @@ jobs:
         with:
           app-name: "safe-forms-api"
           slot-name: "production"
-          package: "./dist"
+          package: "./backend/dist"
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
       - name: Restart Azure Web App
