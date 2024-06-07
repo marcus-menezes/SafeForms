@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -21,21 +20,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { FormStatus, IForm, IManegeForm } from "@safe-forms/shared/models/form";
+import { useCreateForm } from "@/hooks/useCreateForm";
+import { useFormSubmission } from "@/hooks/useFormSubmission";
+import { useUpdateForm } from "@/hooks/useUpdateForm";
 import { FormSchema } from "@/schemes/formSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IForm, IManegeForm } from "@safe-forms/shared/models";
 import { City, Country, ICity, IState, State } from "country-state-city";
-import { Plus } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { ControllerRenderProps, useForm, useWatch } from "react-hook-form";
+import InputMask from "react-input-mask";
 import { Card } from "./ui/card";
 import { Combobox } from "./ui/combo-box";
-import { v4 as uuidv4 } from "uuid";
+import { DatePicker } from "./ui/date-picker";
 
 interface IProps {
   data?: IForm;
   edit?: boolean;
-  onSubmit: () => void;
+  onSubmit: (data?: IForm) => void;
 }
 
 const ModalForm = ({ data, edit = false, onSubmit }: IProps) => {
@@ -43,7 +46,12 @@ const ModalForm = ({ data, edit = false, onSubmit }: IProps) => {
     resolver: zodResolver(FormSchema),
     values: edit ? data : undefined,
   });
+
+  const [showModal, setShowModal] = useState(false);
   const { handleSubmit, control } = form;
+
+  const { mutate: createForm } = useCreateForm();
+  const { mutate: updateForm } = useUpdateForm();
 
   const [States, setStates] = useState<IState[]>([]);
   const [Cities, setCities] = useState<ICity[]>([]);
@@ -71,48 +79,41 @@ const ModalForm = ({ data, edit = false, onSubmit }: IProps) => {
     }
   }, [selectedCountry, selectedState]);
 
-  const onSubmitForm = (submitData: IManegeForm) => {
-    const isComplete = Object.values(submitData).every(
-      (value) => value !== undefined && value !== ""
-    );
-    if (isComplete) {
-      // Enviar os dados para o backend
-      console.log("Enviando para o backend:", submitData);
-      // Chame sua função de API aqui
-    } else {
-      const draftForm: IForm = {
-        ...submitData,
-        id: uuidv4(),
-        status: FormStatus.DRAFT,
-        createdAt: new Date().toISOString(),
-      };
-      const hasDraftForm = localStorage.getItem("draftForm");
-      if (edit && hasDraftForm) {
-        const draftForms = JSON.parse(hasDraftForm);
-        const index = draftForms.findIndex(
-          (form: IForm) => form.id === data?.id
-        );
-        draftForms.splice(index, 1, draftForm);
-        localStorage.setItem("draftForm", JSON.stringify(draftForms));
-      } else {
-        if (hasDraftForm) {
-          localStorage.setItem(
-            "draftForm",
-            JSON.stringify([...JSON.parse(hasDraftForm), draftForm])
-          );
-        } else {
-          localStorage.setItem("draftForm", JSON.stringify([draftForm]));
-        }
-      }
-    }
-    onSubmit();
-  };
+  const { onSubmitForm } = useFormSubmission({
+    edit,
+    data,
+    onSubmit: (id) => {
+      onSubmit(id);
+      setShowModal(false);
+    },
+    createForm,
+    updateForm,
+  });
+
+  const CpfInput = (field: ControllerRenderProps<IManegeForm, "cpf">) => (
+    <InputMask
+      mask="999.999.999-99"
+      value={field.value}
+      onChange={field.onChange}
+    >
+      {/* @ts-ignore */}
+      {() => <Input type="text" placeholder="CPF" />}
+    </InputMask>
+  );
 
   return (
-    <Dialog onOpenChange={(open) => open && form.reset()}>
+    <Dialog
+      open={showModal}
+      onOpenChange={(open) => {
+        open && form.reset();
+        setShowModal(open);
+      }}
+    >
       <DialogTrigger>
         {edit ? (
-          <Button>Edit</Button>
+          <Button size="icon">
+            <Pencil className="text-secondary" />
+          </Button>
         ) : (
           <Card className="flex items-center px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90">
             <Plus className="mr-2 h-4 w-4" />
@@ -169,11 +170,7 @@ const ModalForm = ({ data, edit = false, onSubmit }: IProps) => {
                   <FormItem>
                     <FormLabel>Date of Birth</FormLabel>
                     <FormControl>
-                      <Input
-                        type="date"
-                        placeholder="Date of Birth"
-                        {...field}
-                      />
+                      <DatePicker {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -203,7 +200,7 @@ const ModalForm = ({ data, edit = false, onSubmit }: IProps) => {
                   <FormItem>
                     <FormLabel>CPF</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="CPF" {...field} />
+                      <CpfInput {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -278,27 +275,10 @@ const ModalForm = ({ data, edit = false, onSubmit }: IProps) => {
                 )}
               />
             </div>
-            <div>
-              <FormField
-                control={control}
-                name="files"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Files</FormLabel>
-                    <FormControl>
-                      <Input type="file" multiple {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
             <DialogFooter>
-              <DialogClose>
-                <Button type="submit" className="w-full">
-                  Create Form
-                </Button>
-              </DialogClose>
+              <Button type="submit" className="w-full">
+                {edit ? "Edit Form" : "Create Form"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
