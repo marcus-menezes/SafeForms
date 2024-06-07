@@ -98,6 +98,7 @@ The Safe Forms application is a full-stack project designed to manage user-speci
 ## Environment Setup
 
 1. In the root of the project, run the command `yarn install` to install all dependencies for all projects.
+
 2. Add environment variables for the projects:
     - **Frontend**: Create a `.env` file in the root of the frontend folder with the following variables:
 
