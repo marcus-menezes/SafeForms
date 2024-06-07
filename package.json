@@ -1,4 +1,5 @@
 {
+  "name": "safe-forms",
   "private": true,
   "workspaces": [
     "frontend",
