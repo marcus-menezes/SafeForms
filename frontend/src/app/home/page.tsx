@@ -15,17 +15,29 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/components/ui/use-toast";
+import { useDeleteForm } from "@/hooks/useDeleteForm";
+import { useGetAllForms } from "@/hooks/useGetAllForms";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { format, parseISO } from "date-fns";
+import { FormStatus, IForm } from "@safe-forms/shared/models";
+import { compareDesc, format } from "date-fns";
 import { FileBarChart2, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { FormStatus, IForm } from "@safe-forms/shared/models/form";
 
 const HomePage: React.FC = () => {
   const [localForms, setLocalForms] = useState<IForm[]>([]);
 
-  const onSubmitModal = () => {
+  const { data: formsResponse, refetch, isLoading } = useGetAllForms();
+  const { mutate } = useDeleteForm();
+  const { toast } = useToast();
+
+  const onSubmitModal = (data?: IForm) => {
+    if (data) {
+      deleteForm(data);
+    }
     getLocalForms();
+    refetch();
   };
 
   const getLocalForms = () => {
@@ -53,18 +65,69 @@ const HomePage: React.FC = () => {
     </div>
   );
 
-  const delelteForm = (data: IForm) => {
-    const newForms = localForms.filter((form) => form.id !== data.id);
-    setLocalForms(newForms);
-    localStorage.setItem("draftForm", JSON.stringify(newForms));
+  const deleteForm = (data: IForm) => {
+    const successDeleted = () =>
+      toast({
+        variant: "default",
+        title: "Form deleted!",
+        description: "Form deleted successfully.",
+      });
+
+    if (data.status === FormStatus.DRAFT) {
+      const newForms = localForms.filter((form) => form.id !== data.id);
+      setLocalForms(newForms);
+      localStorage.setItem("draftForm", JSON.stringify(newForms));
+      successDeleted();
+    } else {
+      mutate(data.id, {
+        onSuccess: () => {
+          successDeleted();
+          refetch();
+        },
+        onError: () => {
+          toast({
+            variant: "error",
+            title: "Error deleting form!",
+            description: "Something went wrong. Please try again.",
+          });
+        },
+      });
+    }
   };
 
-  if (localForms.length === 0) return renderEmpty();
+  const completeData = () => {
+    const sortItems = (data: IForm[]) =>
+      data.sort((a, b) => {
+        const dateA = a.createdAt;
+        const dateB = b.createdAt;
+        return compareDesc(dateA, dateB);
+      });
+
+    if (formsResponse?.data) {
+      return sortItems(localForms.concat(formsResponse?.data));
+    }
+
+    return sortItems(localForms);
+  };
+
+  const renderLoading = () => {
+    return Array(5)
+      .fill("")
+      .map((_, index) => (
+        <div key={index} className="container py-8">
+          <Skeleton className="w-full h-[100px]" />
+        </div>
+      ));
+  };
+
+  if (isLoading) return renderLoading();
+
+  if (completeData()?.length === 0 && !isLoading) return renderEmpty();
 
   return (
     <div className="container py-8">
       <ModalForm onSubmit={onSubmitModal} />
-      {localForms.map((form, index) => (
+      {completeData()?.map((form, index) => (
         <Card key={index} className="flex my-10 px-10 flex-row justify-between">
           <div className="flex flex-row gap-10">
             <FileBarChart2 size={30} className="text-foreground self-center" />
@@ -95,7 +158,7 @@ const HomePage: React.FC = () => {
               Created At
             </p>
             <p className="text-xl font-medium tracking-tight">
-              {format(parseISO(form.createdAt), "dd/MM/yyyy HH:mm")}
+              {format(new Date(form.createdAt), "dd/MM/yyyy HH:mm")}
             </p>
           </div>
           <div className="flex flex-row gap-5 py-6 justify-center">
@@ -103,18 +166,17 @@ const HomePage: React.FC = () => {
             <Popover>
               <PopoverTrigger>
                 <Button variant="destructive" size="icon">
-                  <Trash2 className="text-secondary" />
+                  <Trash2 className="text-primary" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-80">
-                <h1>Tem certeza que deseja deletar?</h1>
+                <h1>Are you sure you want to delete?</h1>
 
                 <PopoverClose className="grid w-full mt-4 grid-cols-2 gap-2">
-                  <Button variant="outline" onClick={() => delelteForm(form)}>
-                    Sim
+                  <Button variant="outline" onClick={() => deleteForm(form)}>
+                    Yes
                   </Button>
-
-                  <Button>Não</Button>
+                  <Button>No</Button>
                 </PopoverClose>
               </PopoverContent>
             </Popover>
