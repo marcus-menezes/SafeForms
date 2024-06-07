@@ -1,4 +1,12 @@
+import { validateCpf } from "@safe-forms/shared/utils/validateCpf";
 import { z } from "zod";
+
+const cpfSchema = z
+  .string()
+  .refine(validateCpf, {
+    message: "Invalid CPF",
+  })
+  .optional();
 
 export const FormSchema = z.object({
   name: z.string({
@@ -7,12 +15,8 @@ export const FormSchema = z.object({
   email: z.string().email("Invalid email address").optional(),
   birthdate: z.string().optional(),
   description: z.string().optional(),
-  cpf: z
-    .string()
-    .regex(/^\d{11}$/, "CPF must be 11 digits")
-    .optional(),
+  cpf: cpfSchema,
   country: z.string().optional(),
   state: z.string().optional(),
   city: z.string().optional(),
-  files: z.string().optional(),
 });
