@@ -7,6 +7,7 @@ on:
     paths:
       - "backend/**"
       - "shared/**"
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -43,7 +44,7 @@ jobs:
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
       - name: Restart Azure Web App
-        uses: azure/appservice-actions/webapps-restart@v1
+        uses: azure/appservice-actions/webapps-restart@v2
         with:
           app-name: "safe-forms-api"
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
