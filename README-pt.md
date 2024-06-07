@@ -1,50 +1,50 @@
 # SafeForms
 
 - [SafeForms](#safeforms)
-  - [Overview](#overview)
-  - [Usage Flow](#usage-flow)
-  - [Technologies Used](#technologies-used)
-    - [Language](#language)
-    - [Architecture (Monorepo)](#architecture-monorepo)
+  - [Visão Geral](#visão-geral)
+  - [Fluxo de Uso](#fluxo-de-uso)
+  - [Tecnologias Utilizadas](#tecnologias-utilizadas)
+    - [Linguagem](#linguagem)
+    - [Arquiterura (Monorepo)](#arquiterura-monorepo)
     - [Frontend](#frontend)
     - [Backend](#backend)
-    - [Authentication](#authentication)
-    - [Database](#database)
+    - [Autenticação](#autenticação)
+    - [Banco de Dados](#banco-de-dados)
     - [CI/CD](#cicd)
     - [Hosts](#hosts)
-  - [Screen Flow](#screen-flow)
-    - [Login Screen](#login-screen)
-    - [Form Listing Screen](#form-listing-screen)
-    - [Form Creation Screen](#form-creation-screen)
-  - [Environment Setup](#environment-setup)
+  - [Fluxo de Telas](#fluxo-de-telas)
+    - [Tela de login](#tela-de-login)
+    - [Tela de listagem de formulários](#tela-de-listagem-de-formulários)
+    - [Tela de criação de formulário](#tela-de-criação-de-formulário)
+  - [Configuração de ambiente](#configuração-de-ambiente)
 
-## Overview
+## Visão Geral
 
-The Safe Forms application is a full-stack project designed to manage user-specific forms. This application uses Firebase Authentication to handle user login and token validation, ensuring secure and personalized access to form data. The backend, built with NestJS, interacts with the Firebase Admin SDK to authenticate requests and manage user-specific data, while the frontend, built with React and Next.js, seamlessly integrates Firebase Auth for user authentication.
+A aplicação Safe Forms é um projeto full-stack projetado para gerenciar formulários específicos do usuário. Esta aplicação utiliza o Firebase Authentication para lidar com o login do usuário e validação de token, garantindo acesso seguro e personalizado aos dados dos formulários. O backend, construído com NestJS, interage com o Firebase Admin SDK para autenticar solicitações e gerenciar dados específicos do usuário, enquanto o frontend, construído com React e Next.js, integra perfeitamente o Firebase Auth para autenticação de usuários.
 
-## Usage Flow
+## Fluxo de Uso
 
-1. Upon entering the application, you must register via the sign-up screen.
-2. After registration, log in to the application.
-3. Upon first entering the application, you can register a new form.
-4. In the form creation screen, there are two statuses the form can be in:
-     - **Draft**: Status where the form is not yet complete and is saved locally.
+1. Ao entrar na aplicação você deve efetuar seu cadastro pela tela de sign up.
+2. Após o cadatro faça o login na aplicação.
+3. Entrando a primeira vez na aplicação você poderá cadastrar um novo formulário
+4. Dentro da criação de formulário temos dois status que ele pode estar:
+     - **Draft**: Status onde o fomulário ainda não está completo e salvo localmente.
   
-     - **Published**: Status where the form is complete and saved in the database.
-5. You can also edit a form with three use cases:
-    1. If it is in **Draft** status and not completed, it remains in the same status.
+     - **Published**: Status onde o fomulário está completo e salvo no banco de dados.
+5. É possivel também editar um formulário, temos 3 casos de uso:
+    1. Caso esteja no status **Draft** e não for completado ele continua no mesmo status.
 
-    2. If it is in **Published** status, it cannot revert to **Draft** but can be edited normally while remaining in the same status.
+    2. Caso esteja no status **Published** ele não poderá virar **Draft** mas ele pode ser editado normalmente assim se mantendo no mesmo status.
 
-    3. If it is in **Draft** status and completed, it moves to **Published** status.
+    3. Caso esteja no status **Draft** e for completado ele vai para o status **Published**
 
-## Technologies Used
+## Tecnologias Utilizadas
 
-### Language
+### Linguagem
 
 - [TypeScript](https://www.typescriptlang.org/)
 
-### Architecture (Monorepo)
+### Arquiterura (Monorepo)
 
 - [Yarn Workspace](https://classic.yarnpkg.com/en/docs/workspaces/)
 
@@ -56,7 +56,7 @@ The Safe Forms application is a full-stack project designed to manage user-speci
 - [TanStack (React Query)](https://tanstack.com/query/v4)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [axios](https://axios-http.com/)
-- [React Hook Form](https://react-hook-form.com/) with [Zod](https://zod.dev/)
+- [React Hook Form](https://react-hook-form.com/) com [Zod](https://zod.dev/)
 
 ### Backend
 
@@ -64,11 +64,11 @@ The Safe Forms application is a full-stack project designed to manage user-speci
 - [Swagger](https://swagger.io/)
 - [Firebase Admin SDK](https://firebase.google.com/docs/admin/setup)
 
-### Authentication
+### Autenticação
 
 - [Firebase Authentication](https://firebase.google.com/docs/auth)
 
-### Database
+### Banco de Dados
 
 - [Firestore Database](https://firebase.google.com/docs/firestore)
 
@@ -81,25 +81,25 @@ The Safe Forms application is a full-stack project designed to manage user-speci
 - [Vercel (Frontend)](https://vercel.com/)
 - [Azure Web App (Backend)](https://azure.microsoft.com/)
 
-## Screen Flow
+## Fluxo de Telas
 
-### Login Screen
+### Tela de login
 
 ![alt text](./shared//assets//images/signIn.png)
 
-### Form Listing Screen
+### Tela de listagem de formulários
 
 ![alt text](./shared//assets//images/forms.png)
 
-### Form Creation Screen
+### Tela de criação de formulário
 
 ![alt text](./shared//assets//images/createForm.png)
 
-## Environment Setup
+## Configuração de ambiente
 
-1. In the root of the project, run the command `yarn install` to install all dependencies for all projects.
-2. Add environment variables for the projects:
-    - **Frontend**: Create a `.env` file in the root of the frontend folder with the following variables:
+1. No root do projeto rode o comando yarn install para instalar todas as depedencias de todos os projetos.
+2. Adicionar envs para projetos:
+    - **Frontend**: Criar um arquivo .env na pasta frontend na raiz com as seguindes variaveis:
 
     ```sh
     NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDBoNfVhPW3Jhaih-nnuCVW8swRPvX2n68
@@ -112,7 +112,7 @@ The Safe Forms application is a full-stack project designed to manage user-speci
     NEXT_PUBLIC_API_URL=http://localhost:4000
     ```
 
-    - **Backend**: Create a `.env` file in the root of the backend folder with the following variables:
+    - **Backend**: Criar um arquivo .env na pasta backend na raiz com as seguindes variaveis:
 
     ```sh
     FIREBASE_PROJECT_ID=safeforms-649cd
@@ -120,7 +120,7 @@ The Safe Forms application is a full-stack project designed to manage user-speci
     FIREBASE_CLIENT_EMAIL=firebase-adminsdk-d9w1a@safeforms-649cd.iam.gserviceaccount.com
     ```
 
-3. To run the projects, use the following commands:
+3. Para rodar os projetos temos os comandos:
     - **Frontend** (PORT 3000):
 
     ```sh
