@@ -1,11 +1,23 @@
 {
   "name": "safe-forms",
   "private": true,
-  "workspaces": [
-    "frontend",
-    "backend",
-    "shared"
-  ],
+  "workspaces": {
+    "packages": [
+      "frontend",
+      "backend",
+      "shared"
+    ],
+    "nohoist": [
+      "**/@nestjs/**",
+      "**/@nestjs/**/**",
+      "**/class-transformer",
+      "**/class-validator",
+      "**/firebase-admin",
+      "**/reflect-metadata",
+      "**/rxjs",
+      "**/swagger-ui-express"
+    ]
+  },
   "scripts": {
     "start:frontend": "yarn workspace @safe-forms/frontend dev",
     "start:backend": "yarn workspace @safe-forms/backend start",

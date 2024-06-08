@@ -28,7 +28,8 @@ jobs:
           echo FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }} >> ./backend/.env
 
       - name: Install dependencies
-        run: yarn workspaces focus @safe-forms/backend --production
+        working-directory: ./backend
+        run: yarn
 
       - name: Build project
         working-directory: ./backend
@@ -59,9 +60,6 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-
-      - name: Clean up zip file
-        run: rm release.zip
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
