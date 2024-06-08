@@ -31,6 +31,7 @@ jobs:
           echo FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }} >> ./backend/.env
           echo FIREBASE_PRIVATE_KEY=${{ secrets.FIREBASE_PRIVATE_KEY }} >> ./backend/.env
           echo FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }} >> ./backend/.env
+          echo API_PORT=${{ secrets.API_PORT }} >> ./backend/.env
 
       - name: Build project
         run: yarn build:backend
