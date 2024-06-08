@@ -31,8 +31,7 @@ jobs:
         run: yarn
 
       - name: Build project
-        working-directory: ./backend
-        run: yarn build
+        run: yarn build:backend
 
       - name: Zip artifact for deployment
         run: zip -r ../release.zip .
@@ -40,7 +39,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: node-app
+          name: nest-app
           path: release.zip
 
   deploy:
@@ -54,7 +53,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: node-app
+          name: nest-app
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
