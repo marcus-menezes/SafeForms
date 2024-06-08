@@ -132,3 +132,7 @@ A aplicação Safe Forms é um projeto full-stack projetado para gerenciar formu
     ```sh
     yarn start:backend
     ```
+
+     [Open swagger local](http://localhost:4000/api#/)
+
+     ![alt text](./shared/assets/images/swagger.png)

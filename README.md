@@ -133,3 +133,6 @@ The Safe Forms application is a full-stack project designed to manage user-speci
     ```sh
     yarn start:backend
     ```
+    [Open swagger local](http://localhost:4000/api#/)
+
+    ![alt text](./shared/assets/images/swagger.png)
