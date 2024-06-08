@@ -28,7 +28,6 @@ jobs:
           echo FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }} >> ./backend/.env
 
       - name: Install dependencies
-        working-directory: ./backend
         run: yarn
 
       - name: Build project
